@@ -33,7 +33,9 @@ function renderChart() {
   const ctx = document.getElementById('priceChart').getContext('2d');
 
   const labels = pricesData.map(p => p.date);
-  const prices = pricesData.map(p => p.prices.unleaded);
+  const unleadedPrices = pricesData.map(p => p.prices.unleaded);
+  const dieselPrices = pricesData.map(p => p.prices.diesel);
+  const averagePrices = unleadedPrices.map((u, i) => (u + dieselPrices[i]) / 2);
   
   const eventDates = annotationsData.map(a => a.date);
   const eventIndices = eventDates.map(date => labels.indexOf(date));
@@ -44,23 +46,56 @@ function renderChart() {
       labels: labels,
       datasets: [
         {
-          label: 'Gas Price (PHP/liter)',
-          data: prices,
+          label: 'Unleaded',
+          data: unleadedPrices,
           borderColor: '#000000',
           backgroundColor: 'rgba(0, 0, 0, 0.05)',
           borderWidth: 3,
           fill: true,
           tension: 0.4,
           pointRadius: 6,
-          pointBackgroundColor: prices.map((_, index) =>
+          pointStyle: 'circle',
+          pointBackgroundColor: unleadedPrices.map((_, index) =>
             eventIndices.includes(index) ? '#ff0000' : '#000000'
           ),
-          pointBorderColor: prices.map((_, index) =>
+          pointBorderColor: unleadedPrices.map((_, index) =>
             eventIndices.includes(index) ? '#cc0000' : '#000000'
           ),
           pointBorderWidth: 2,
           pointHoverRadius: 8,
           pointHoverBackgroundColor: '#ffcc00',
+        },
+        {
+          label: 'Diesel',
+          data: dieselPrices,
+          borderColor: '#000000',
+          backgroundColor: 'rgba(0, 0, 0, 0.05)',
+          borderWidth: 3,
+          fill: true,
+          tension: 0.4,
+          pointRadius: 6,
+          pointStyle: 'rect',
+          pointBackgroundColor: dieselPrices.map((_, index) =>
+            eventIndices.includes(index) ? '#ff0000' : '#000000'
+          ),
+          pointBorderColor: dieselPrices.map((_, index) =>
+            eventIndices.includes(index) ? '#cc0000' : '#000000'
+          ),
+          pointBorderWidth: 2,
+          pointHoverRadius: 8,
+          pointHoverBackgroundColor: '#ffcc00',
+        },
+        {
+          label: 'Average',
+          data: averagePrices,
+          borderColor: '#ff0000',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          fill: false,
+          tension: 0.4,
+          borderDash: [5, 5],
+          pointRadius: 0,
+          pointHoverRadius: 0,
         }
       ]
     },
@@ -71,7 +106,7 @@ function renderChart() {
         legend: {
           display: true,
           labels: {
-            font: { size: 12 }
+            font: { size: 14 }
           }
         },
         tooltip: {
@@ -95,7 +130,12 @@ function renderChart() {
         y: {
           beginAtZero: false,
           ticks: {
-            callback: (value) => `P${value}`
+            callback: (value) => `₱${value}`
+          },
+          title: {
+            display: true,
+            text: 'Price (PHP/Liter)',
+            font: { size: 12 }
           }
         }
       },
