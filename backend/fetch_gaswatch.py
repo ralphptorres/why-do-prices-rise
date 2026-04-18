@@ -2,13 +2,15 @@
 
 import json
 import re
+import subprocess
 import urllib.request
 from datetime import datetime
 from pathlib import Path
 
 GASWATCH_URL = "https://gaswatchph.com/js/data.js"
 DATA_DIR = Path(__file__).parent.parent / "data"
-PRICES_FILE = DATA_DIR / "prices-history.json"
+PRICES_FILE = DATA_DIR / "out" / "prices-history.json"
+SNAPSHOTS_DIR = DATA_DIR / "src"
 
 
 def fetch_gaswatch_data() -> str:
@@ -83,11 +85,37 @@ def save_prices(data: dict) -> None:
     print(f"Saved {len(data['prices'])} price entries to {PRICES_FILE}")
 
 
+def update_submodule() -> None:
+    """Update data submodule to latest."""
+    try:
+        repo_root = Path(__file__).parent.parent
+        subprocess.run(["git", "-C", str(repo_root), "submodule", "update", "--remote"], check=True)
+        print("Updated data submodule")
+    except subprocess.CalledProcessError as e:
+        print(f"Warning: Could not update submodule: {e}")
+
+
+def save_raw_snapshot(js_content: str) -> None:
+    """Save raw GasWatch data.js snapshot."""
+    SNAPSHOTS_DIR.mkdir(exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d")
+    snapshot_file = SNAPSHOTS_DIR / f"data-{timestamp}.js"
+    with open(snapshot_file, "w") as f:
+        f.write(js_content)
+    print(f"Saved raw data snapshot to {snapshot_file}")
+
+
 if __name__ == "__main__":
+    print("Updating data submodule...")
+    update_submodule()
+
     print("Fetching data from GasWatch PH...")
     js_content = fetch_gaswatch_data()
 
     if js_content:
+        print("Saving raw data snapshot...")
+        save_raw_snapshot(js_content)
+
         print("Parsing data...")
         price_history = parse_gaswatch_data(js_content)
 

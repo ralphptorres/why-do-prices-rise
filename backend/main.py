@@ -18,8 +18,8 @@ app.add_middleware(
 )
 
 DATA_DIR = Path(__file__).parent.parent / "data"
-PRICES_FILE = DATA_DIR / "prices-history.json"
-ANNOTATIONS_FILE = DATA_DIR / "annotations.json"
+PRICES_FILE = DATA_DIR / "out" / "prices-history.json"
+ANNOTATIONS_FILE = DATA_DIR / "out" / "annotations.json"
 
 
 def load_prices() -> dict:
