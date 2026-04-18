@@ -13,7 +13,7 @@ async function fetchData() {
     const pricesJson = await pricesRes.json();
     const annotationsJson = await annotationsRes.json();
     
-    pricesData = pricesJson.prices;
+    pricesData = pricesJson.prices.sort((a, b) => new Date(a.date) - new Date(b.date));
     annotationsData = annotationsJson.annotations;
     
     annotationsData.forEach(ann => {
