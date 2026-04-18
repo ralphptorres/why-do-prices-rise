@@ -1,0 +1,189 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Georgia', serif;
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  color: #000000;
+  margin-bottom: 40px;
+  border-bottom: 3px solid #ff0000;
+  padding-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+header p {
+  font-size: 1rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  color: #333333;
+}
+
+main {
+  background: #ffffff;
+  border-radius: 0;
+  box-shadow: 0 0 0 1px #e5e5e5;
+  overflow: hidden;
+  border: 1px solid #cccccc;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
+  padding: 40px;
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e5e5e5;
+  padding-right: 30px;
+}
+
+.chart-container {
+  position: relative;
+  height: 400px;
+  width: 100%;
+}
+
+.chips-section {
+  border-left: none;
+  padding-left: 0;
+}
+
+.chips-section h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #000000;
+  margin-bottom: 20px;
+  font-weight: 900;
+  border-bottom: 2px solid #ff0000;
+  padding-bottom: 10px;
+}
+
+.chips-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.placeholder {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.chip {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 0;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-left: 4px solid #ff0000;
+}
+
+.chip:hover {
+  background: #f9f9f9;
+  border: 1px solid #cccccc;
+  border-left: 4px solid #cc0000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.chip-date {
+  font-size: 0.7rem;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.chip-title {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #000000;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.chip-description {
+  font-size: 0.8rem;
+  color: #555555;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.chip-links {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chip-link {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 0;
+  text-decoration: none;
+  color: #000000;
+  transition: all 0.15s ease;
+  font-weight: 600;
+}
+
+.chip-link:hover {
+  background: #ff0000;
+  color: #ffffff;
+  border-color: #ff0000;
+}
+
+@media (max-width: 1024px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .chart-section {
+    border-right: none;
+    border-bottom: 1px solid #e5e5e5;
+    padding-right: 0;
+    padding-bottom: 30px;
+  }
+
+  .chips-section {
+    border-left: none;
+    border-top: none;
+    padding-left: 0;
+    padding-top: 0;
+  }
+
+  .chart-container {
+    height: 300px;
+  }
+}
