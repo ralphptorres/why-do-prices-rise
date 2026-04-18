@@ -1,29 +1,61 @@
+const API_URL = 'http://localhost:8000/api';
+
 let chart = null;
+let pricesData = [];
+let annotationsData = [];
+let annotationsByDate = {};
+
+async function fetchData() {
+  try {
+    const pricesRes = await fetch(`${API_URL}/prices`);
+    const annotationsRes = await fetch(`${API_URL}/annotations`);
+    
+    const pricesJson = await pricesRes.json();
+    const annotationsJson = await annotationsRes.json();
+    
+    pricesData = pricesJson.prices;
+    annotationsData = annotationsJson.annotations;
+    
+    annotationsData.forEach(ann => {
+      annotationsByDate[ann.date] = ann;
+    });
+    
+    renderChart();
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    document.getElementById('chipsContainer').innerHTML = '<p class="placeholder">Error loading data from API</p>';
+  }
+}
 
 function renderChart() {
+  if (pricesData.length === 0) return;
+  
   const ctx = document.getElementById('priceChart').getContext('2d');
 
-  const eventDates = Object.keys(priceData.events);
-  const eventIndices = eventDates.map(date => priceData.labels.indexOf(date));
+  const labels = pricesData.map(p => p.date);
+  const prices = pricesData.map(p => p.prices.unleaded);
+  
+  const eventDates = annotationsData.map(a => a.date);
+  const eventIndices = eventDates.map(date => labels.indexOf(date));
 
   chart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: priceData.labels,
+      labels: labels,
       datasets: [
         {
           label: 'Gas Price (PHP/liter)',
-          data: priceData.prices,
+          data: prices,
           borderColor: '#000000',
           backgroundColor: 'rgba(0, 0, 0, 0.05)',
           borderWidth: 3,
           fill: true,
           tension: 0.4,
           pointRadius: 6,
-          pointBackgroundColor: priceData.prices.map((_, index) =>
+          pointBackgroundColor: prices.map((_, index) =>
             eventIndices.includes(index) ? '#ff0000' : '#000000'
           ),
-          pointBorderColor: priceData.prices.map((_, index) =>
+          pointBorderColor: prices.map((_, index) =>
             eventIndices.includes(index) ? '#cc0000' : '#000000'
           ),
           pointBorderWidth: 2,
@@ -54,7 +86,7 @@ function renderChart() {
               return `${context[0].label}`;
             },
             label: (context) => {
-              return `Price: ₱${context.parsed.y.toFixed(2)}/liter`;
+              return `Price: P${context.parsed.y.toFixed(2)}/liter`;
             }
           }
         }
@@ -62,17 +94,15 @@ function renderChart() {
       scales: {
         y: {
           beginAtZero: false,
-          min: 55,
-          max: 80,
           ticks: {
-            callback: (value) => `₱${value}`
+            callback: (value) => `P${value}`
           }
         }
       },
       onHover: (event, activeElements) => {
         if (activeElements.length > 0) {
           const index = activeElements[0].index;
-          const date = priceData.labels[index];
+          const date = labels[index];
           displayChip(date);
         } else {
           clearChips();
@@ -83,25 +113,25 @@ function renderChart() {
 }
 
 function displayChip(date) {
-  const event = priceData.events[date];
+  const annotation = annotationsByDate[date];
   const container = document.getElementById('chipsContainer');
 
-  if (!event) {
+  if (!annotation) {
     container.innerHTML = '<p class="placeholder">no events recorded for this date</p>';
     return;
   }
 
-  const linksHtml = event.sources
+  const linksHtml = annotation.sources
     .map(source => `<a href="${source.url}" target="_blank" class="chip-link">${source.name}</a>`)
     .join('');
 
   const chipHtml = `
     <div class="chip">
       <div class="chip-date">${date}</div>
-      <div class="chip-title">${event.title}</div>
-      <div class="chip-description">${event.description}</div>
+      <div class="chip-title">${annotation.event_title}</div>
+      <div class="chip-description">${annotation.summary}</div>
       <div class="chip-links">${linksHtml}</div>
-      <div class="chip-impact" style="font-size: 0.75rem; margin-top: 8px; color: #e74c3c; font-weight: 600;">${event.price_impact}</div>
+      <div class="chip-impact" style="font-size: 0.75rem; margin-top: 8px; color: #e74c3c; font-weight: 600;">${annotation.price_impact}</div>
     </div>
   `;
 
@@ -113,7 +143,6 @@ function clearChips() {
   container.innerHTML = '<p class="placeholder">hover over data points to see related events</p>';
 }
 
-// initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
-  renderChart();
+  fetchData();
 });
