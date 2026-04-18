@@ -1,0 +1,60 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Manila gas price history from GasWatch PH",
+    "last_updated": "2026-04-18T15:11:29.152044Z",
+    "source": "GasWatch PH"
+  },
+  "prices": [
+    {
+      "date": "2026-04-15",
+      "region": "ncr",
+      "region_name": "Metro Manila",
+      "prices": {
+        "unleaded": 94.45,
+        "diesel": 134.13
+      },
+      "source": "gaswatch-ph"
+    },
+    {
+      "date": "2026-04-08",
+      "region": "ncr",
+      "region_name": "Metro Manila",
+      "prices": {
+        "unleaded": 95.59,
+        "diesel": 152.0
+      },
+      "source": "gaswatch-ph"
+    },
+    {
+      "date": "2026-04-01",
+      "region": "ncr",
+      "region_name": "Metro Manila",
+      "prices": {
+        "unleaded": 90.93,
+        "diesel": 133.19
+      },
+      "source": "gaswatch-ph"
+    },
+    {
+      "date": "2026-03-25",
+      "region": "ncr",
+      "region_name": "Metro Manila",
+      "prices": {
+        "unleaded": 89.17,
+        "diesel": 121.03
+      },
+      "source": "gaswatch-ph"
+    },
+    {
+      "date": "2026-03-18",
+      "region": "ncr",
+      "region_name": "Metro Manila",
+      "prices": {
+        "unleaded": 79.29,
+        "diesel": 104.05
+      },
+      "source": "gaswatch-ph"
+    }
+  ]
+}
