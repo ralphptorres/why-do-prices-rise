@@ -1,3 +1,4 @@
 [submodule "data"]
 	path = data
 	url = https://github.com/ralphptorres/why-do-prices-rise-data.git
+	branch = main
