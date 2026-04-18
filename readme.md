@@ -14,6 +14,47 @@ future.
 - **price forecasting** - view predictions for upcoming gas prices
 - **AI-powered backend** - analyzes price data and geopolitical events
 
+## getting started
+
+### requirements
+- Python 3.13+
+- uv (Python package manager)
+
+### installation
+
+```bash
+git clone <repo-url>
+cd why-do-prices-rise
+uv sync
+```
+
+### running the project
+
+Start the backend API:
+```bash
+uv run uvicorn backend.main:app --reload
+```
+API will be available at http://localhost:8000
+
+Serve the frontend:
+```bash
+cd frontend
+python -m http.server 8000
+```
+Frontend will be available at http://localhost:8000
+
+### data management
+
+View price data:
+```bash
+uv run python backend/pipeline.py list-prices
+```
+
+View annotations:
+```bash
+uv run python backend/pipeline.py list-annotations
+```
+
 ## license
 
 todo
